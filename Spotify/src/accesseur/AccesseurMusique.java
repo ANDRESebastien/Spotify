@@ -15,7 +15,11 @@ public class AccesseurMusique {
 	@PersistenceContext(unitName = "persistenceH2")
 	private EntityManager em;
 
-	public void insert(TableMusique tableMusique) {
+	public void insert(String titre, String artiste) {
+		System.out.println("AccesseurMusique:insert: titre="+titre+" artiste="+ artiste);
+		TableMusique tableMusique = new TableMusique();
+		tableMusique.setTitre(titre);
+		tableMusique.setArtiste(artiste);
 		this.em.persist(tableMusique);
 	}
 

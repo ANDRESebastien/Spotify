@@ -1,32 +1,57 @@
 package page;
 
-public class PageMusique {
+import java.io.Serializable;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
+import metier.MetierMusique;
+import structure.Musique;
+
+@ManagedBean
+@RequestScoped
+public class PageMusique implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	private Musique musique;
 	
-	private long idMusique;
-	private String titre;
-	private String artiste;
+	@EJB
+	private MetierMusique metierMusique;
 
-	public String getTitre() {
-		return titre;
+	public PageMusique() {
+		this.musique = new Musique();
 	}
 
-	public void setTitre(String titre) {
-		this.titre = titre;
+	public String delete(long id) {
+		this.metierMusique.delete(id);
+		return "listemusique";
 	}
 
-	public String getArtiste() {
-		return artiste;
+	public void ajouter() {
+		System.out.println("PageMusique:ajouter: titre="+this.musique.getTitre()+" artiste="+ this.musique.getArtiste());
+		this.metierMusique.ajouter(this.musique.getTitre(), this.musique.getArtiste());
 	}
 
-	public void setArtiste(String artiste) {
-		this.artiste = artiste;
+	public void supprimer() {
+		this.metierMusique.supprimer(this.musique.getTitre(), this.musique.getArtiste());
+	}
+	
+	public void modifier() {
+		this.metierMusique.modifier(this.musique.getIdMusique(),this.musique.getTitre(), this.musique.getArtiste());
+	}
+	
+	public String prepare() {
+		this.musique = this.metierMusique.prepare(this.musique.getIdMusique());
+		return "musique";
 	}
 
-	public long getIdMusique() {
-		return idMusique;
+	public Musique getMusique() {
+		return musique;
 	}
 
-	public void setIdMusique(long idMusique) {
-		this.idMusique = idMusique;
+	public void setMusique(Musique musique) {
+		this.musique = musique;
 	}
 }

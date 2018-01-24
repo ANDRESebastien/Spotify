@@ -9,11 +9,11 @@
 <h:body>
 	<h1>Musique</h1>
 	<h:form id="musiqueForm">
-		<h:inputHidden value="#{metierMusique.pageMusique.idMusique}" />
+		<h:inputHidden value="#{pageMusique.musique.idMusique}" />
 		<p>
 			<h:outputLabel value="Titre : " />
 			<h:inputText id="titre" label="titre"
-				value="#{metierMusique.pageMusique.titre}" required="true">
+				value="#{pageMusique.musique.titre}" required="true">
 				<!-- <f:validator validatorId="nomValidator" /> -->
 			</h:inputText>
 			<h:message for="titre" />
@@ -22,7 +22,7 @@
 		<p>
 			<h:outputLabel value="Artiste : " />
 			<h:inputText id="artiste" label="artiste"
-				value="#{metierMusique.pageMusique.artiste}" required="true">
+				value="#{pageMusique.musique.artiste}" required="true">
 				<!--  <f:validator validatorId="motDePasseValidator" />
 				<f:attribute name="attributNom" value="#{nomBinding}" /> -->
 			</h:inputText>
@@ -35,13 +35,13 @@
 
 		<p>
 			<h:commandButton id="ajouter" label="bouton ajouter" value="Ajouter"
-				action="#{metierMusique.ajouter()}" />
+				action="#{pageMusique.ajouter()}" />
 			<h:commandButton id="supprimer" label="bouton supprimer"
-				value="Supprimer" action="#{metierMusique.supprimer()}" />
+				value="Supprimer" action="#{pageMusique.supprimer()}" />
 
 			<c:if test="#{metierMusique.pageMusique.idMusique} > 0">
 				<h:commandButton id="modifier" label="bouton modifier"
-					value="Modifier" action="#{metierMusique.modifier()}"></h:commandButton>
+					value="Modifier" action="#{pageMusique.modifier()}"></h:commandButton>
 			</c:if>
 		</p>
 

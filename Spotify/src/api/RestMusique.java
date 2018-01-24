@@ -39,10 +39,7 @@ public class RestMusique {
 	@Path("/{titre}/{artiste}")
 	@Produces("text/html")
 	public String ajoute(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
-		TableMusique TableMusique = new TableMusique();
-		TableMusique.setTitre(titre);
-		TableMusique.setArtiste(artiste);
-		this.accesseurMusique.insert(TableMusique);
+		this.accesseurMusique.insert(titre, artiste);
 		return "Ok";
 	}
 
@@ -50,7 +47,7 @@ public class RestMusique {
 	@Path("/ajoute")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String ajoute(TableMusique tableMusique) {
-		this.accesseurMusique.insert(tableMusique);
+		this.accesseurMusique.insert(tableMusique.getTitre(),tableMusique.getArtiste());
 		return "Ok";
 	}
 

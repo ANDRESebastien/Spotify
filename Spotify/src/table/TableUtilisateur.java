@@ -30,11 +30,11 @@ public class TableUtilisateur {
 	private String motDePasse;
 
 	@Column
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<TableMusique> listeMusique;
 
 	public TableUtilisateur() {
-		this.listeMusique = new ArrayList<>();
+		
 	}
 
 	public long getIdUtilisateur() {
@@ -69,4 +69,14 @@ public class TableUtilisateur {
 		this.motDePasse = motDePasse;
 	}
 
+	public List<TableMusique> getListeMusique() {
+		if (this.listeMusique == null) {
+			this.listeMusique = new ArrayList<>();
+		}
+		return listeMusique;
+	}
+
+	public void setListeMusique(List<TableMusique> listeMusique) {
+		this.listeMusique = listeMusique;
+	}
 }

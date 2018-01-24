@@ -15,26 +15,24 @@ import javax.persistence.Table;
 @Entity
 @Table(name="Musique")
 public class TableMusique {
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long idMusique;
 
 	@Column
 	private String titre;
-	
+
 	@Column
 	private String artiste;
-	
+
 	@Column
-	@ManyToMany(fetch=FetchType.LAZY)
+	@ManyToMany(fetch=FetchType.EAGER)
 	private List<TableUtilisateur> listeUtilisateur;
-	
-	
-	public TableMusique () {
-		this.listeUtilisateur = new ArrayList<>();
+
+	public TableMusique() {
 	}
-	
+
 	public long getIdMusique() {
 		return idMusique;
 	}
@@ -60,11 +58,14 @@ public class TableMusique {
 	}
 
 	public List<TableUtilisateur> getListeUtilisateur() {
-		return listeUtilisateur;
+		if (this.listeUtilisateur == null) {
+			this.listeUtilisateur = new ArrayList<>();
+		}
+		return this.listeUtilisateur;
 	}
 
 	public void setListeUtilisateur(List<TableUtilisateur> listeUtilisateur) {
 		this.listeUtilisateur = listeUtilisateur;
 	}
-	
+
 }

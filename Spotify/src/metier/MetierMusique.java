@@ -1,34 +1,24 @@
 package metier;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.ejb.Stateless;
 
 import accesseur.AccesseurMusique;
-import page.PageListeMusique;
-import page.PageMusique;
+import structure.Musique;
 import table.TableMusique;
 
-@ManagedBean
-@RequestScoped
+@Stateless
 public class MetierMusique implements Serializable {
-
 	private static final long serialVersionUID = 1L;
-
-	private TableMusique musique;
-	private PageMusique pageMusique;
-	private PageListeMusique pageListeMusique;
 
 	@EJB
 	private AccesseurMusique accesseurMusique;
 
 	public MetierMusique() {
-		this.musique = new TableMusique();
-		this.pageMusique = new PageMusique();
-		this.pageListeMusique = new PageListeMusique();
 	}
 
 	public String delete(long id) {
@@ -36,34 +26,13 @@ public class MetierMusique implements Serializable {
 		return "listemusique";
 	}
 
-	public void ajouter() {
-		this.musique.setTitre(this.pageMusique.getTitre());
-		this.musique.setArtiste(this.pageMusique.getArtiste());
-		this.accesseurMusique.insert(this.musique);
+	public void ajouter(String titre, String artiste) {
+		System.out.println("MetierMusique:ajouter: titre="+titre+" artiste="+ artiste);
+		this.accesseurMusique.insert(titre, artiste);
 	}
 
-	public void supprimer() {
-		this.musique.setTitre(this.pageMusique.getTitre());
-		this.musique.setArtiste(this.pageMusique.getArtiste());
-
-		TableMusique tableMusique = this.accesseurMusique.recherche(this.musique.getTitre(), this.musique.getArtiste());
-
-		if (tableMusique != null) {
-			System.out.println("MetierMusique:supprimer(): trouvé id = " + tableMusique.getIdMusique());
-			this.accesseurMusique.delete(tableMusique.getIdMusique());
-		} else {
-			System.out.println("MetierMusique:supprimer(): non trouvé " + tableMusique);
-		}
-	}
-	
-	public void modifier() {
-		this.musique.setIdMusique(this.pageMusique.getIdMusique());
-		
-		
-		this.musique.setTitre(this.pageMusique.getTitre());
-		this.musique.setArtiste(this.pageMusique.getArtiste());
-
-		TableMusique tableMusique = this.accesseurMusique.recherche(this.musique.getTitre(), this.musique.getArtiste());
+	public void supprimer(String titre, String artiste) {
+		TableMusique tableMusique = this.accesseurMusique.recherche(titre, artiste);
 
 		if (tableMusique != null) {
 			System.out.println("MetierMusique:supprimer(): trouvé id = " + tableMusique.getIdMusique());
@@ -73,40 +42,49 @@ public class MetierMusique implements Serializable {
 		}
 	}
 
-	public List<TableMusique> liste() {
-		return accesseurMusique.liste();
-	}
-	
-	public String prepare(long id) {
-		this.musique = this.accesseurMusique.select(id);
-		this.pageMusique.setIdMusique(this.musique.getIdMusique());
-		System.out.println();
-		this.pageMusique.setTitre(this.musique.getTitre());
-		this.pageMusique.setArtiste(this.musique.getArtiste());
-		return "musique";
+	public void supprimer(long id) {
+		TableMusique tableMusique = this.accesseurMusique.select(id);
+
+		if (tableMusique != null) {
+			System.out.println("MetierMusique:supprimer(): trouvé id = " + tableMusique.getIdMusique());
+			this.accesseurMusique.delete(tableMusique.getIdMusique());
+		} else {
+			System.out.println("MetierMusique:supprimer(): non trouvé " + tableMusique);
+		}
 	}
 
-	public TableMusique getMusique() {
+	public void modifier(long id, String titre, String artiste) {
+		TableMusique tableMusique = this.accesseurMusique.recherche(titre, artiste);
+
+		if (tableMusique != null) {
+			System.out.println("MetierMusique:supprimer(): trouvé id = " + tableMusique.getIdMusique());
+			this.accesseurMusique.delete(tableMusique.getIdMusique());
+		} else {
+			System.out.println("MetierMusique:supprimer(): non trouvé " + tableMusique);
+		}
+	}
+
+	public List<Musique> liste() {
+		System.out.println("MetierMusique:liste()");
+		List<TableMusique> listeTableMusique = accesseurMusique.liste();
+		List<Musique> listeMusique = new ArrayList<>();
+		Musique musique = new Musique();;
+		for (TableMusique tableMusique : listeTableMusique) {
+			musique.setIdMusique(tableMusique.getIdMusique());
+			musique.setTitre(tableMusique.getTitre());
+			musique.setArtiste(tableMusique.getArtiste());
+			System.out.println("MetierMusique:liste: titre" + musique.getTitre());
+			listeMusique.add(musique);
+		}
+		return listeMusique;
+	}
+
+	public Musique prepare(long id) {
+		TableMusique tableMusique = this.accesseurMusique.select(id);
+		Musique musique = new Musique();
+		musique.setIdMusique(tableMusique.getIdMusique());
+		musique.setTitre(tableMusique.getTitre());
+		musique.setArtiste(tableMusique.getArtiste());
 		return musique;
-	}
-
-	public void setMusique(TableMusique musique) {
-		this.musique = musique;
-	}
-
-	public PageMusique getPageMusique() {
-		return pageMusique;
-	}
-
-	public void setPageMusique(PageMusique pageMusique) {
-		this.pageMusique = pageMusique;
-	}
-
-	public PageListeMusique getPageListeMusique() {
-		return pageListeMusique;
-	}
-
-	public void setPageListeMusique(PageListeMusique pageListeMusique) {
-		this.pageListeMusique = pageListeMusique;
 	}
 }
