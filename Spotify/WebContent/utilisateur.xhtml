@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Utilisateur</title>
+</h:head>
+<h:body>
+	<h1>Utilisateur</h1>
+	<h:form id="utilisateurForm">
+		<p>
+			<h:outputLabel value="Nom utilisateur : " />
+			<h:inputText id="nom" label="nom"
+				value="#{metierUtilisateur.pageUtilisateur.nom}"
+				required="true" binding="#{nomBinding}">
+				<f:validator validatorId="nomValidator" />
+			</h:inputText>
+			<h:message for="nom" />
+		</p>
+
+		<p>
+			<h:outputLabel value="Email : " />
+			<h:inputText id="email" label="email"
+				value="#{metierUtilisateur.pageUtilisateur.email}"
+				required="true">
+				<f:validator validatorId="nomValidator" />
+			</h:inputText>
+			<h:message for="nom" />
+		</p>
+
+		<p>
+			<h:outputLabel value="Mot de passe : " />
+			<h:inputSecret id="motDePasse" label="Mot de passe"
+				value="#{metierUtilisateur.pageUtilisateur.motDePasse}"
+				required="true">
+				<f:validator validatorId="motDePasseValidator" />
+				<f:attribute name="attributNom" />
+			</h:inputSecret>
+			<h:message for="motDePasse" />
+		</p>
+
+		<p>
+			<h:message for="global" id="global" />
+		</p>
+
+		<p>
+			<h:commandButton id="valider" label="bouton valider" value="Valider"
+				action="#{metierUtilisateur.aiguillage()}">
+			</h:commandButton>
+
+			<h:column>
+				<h:commandButton id="connexion" label="bouton connexion"
+					value="Connexion" action="#{metierUtilisateur.connexion()}" />
+			</h:column>
+
+		</p>
+	</h:form>
+	<h:form>
+		<h:commandButton id="boutonliste" label="bouton listeutilisateur"
+			value="Liste" action="listeutilisateur" />
+	</h:form>
+</h:body>
+</html>
