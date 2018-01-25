@@ -9,8 +9,8 @@ import javax.ejb.Stateless;
 
 import accesseur.AccesseurMusique;
 import structure.Musique;
-import structure.MusiqueParam;
 import structure.MusiqueDTO;
+import structure.MusiqueParam;
 import table.TableMusique;
 
 @Stateless
@@ -20,123 +20,80 @@ public class MetierMusique implements Serializable {
 	@EJB
 	private AccesseurMusique accesseurMusique;
 
-	public MetierMusique() {
-	}
-
 	public void ajouter(String titre, String artiste) {
-		this.accesseurMusique.insert(titre, artiste);
+		this.accesseurMusique.insert(transcodeTableEnParam(titre, artiste));
 	}
 
-	public Musique recherche(long idMusique) {
+	public Musique rechercher(long idMusique) {
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
-		Musique musique = new MusiqueDTO();
-		musique.setIdMusique(tableMusique.getIdMusique());
-		musique.setTitre(tableMusique.getTitre());
-		musique.setArtiste(tableMusique.getArtiste());
-		musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-		return musique;
+		return transcodeTableEnDTO(tableMusique);
 	}
 
 	public Musique recherche(String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.recherche(titre, artiste);
-		Musique musique = new MusiqueDTO();
-		musique.setIdMusique(tableMusique.getIdMusique());
-		musique.setTitre(tableMusique.getTitre());
-		musique.setArtiste(tableMusique.getArtiste());
-		musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-		return musique;
+		TableMusique tableMusique = this.accesseurMusique.recherche(transcodeTableEnParam(titre, artiste));
+		return transcodeTableEnDTO(tableMusique);
 	}
 
 	public void supprimer(String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.recherche(titre, artiste);
-
+		TableMusique tableMusique = this.accesseurMusique.recherche(transcodeTableEnParam(titre, artiste));
 		if (tableMusique != null) {
 			this.accesseurMusique.delete(tableMusique.getIdMusique());
 		}
 	}
-
-	public void supprimer(long id) {
-		TableMusique tableMusique = this.accesseurMusique.select(id);
-
-		if (tableMusique != null) {
-			this.accesseurMusique.delete(tableMusique.getIdMusique());
-		}
+	public void supprimer(long idMusique) {
+		this.accesseurMusique.delete(idMusique);
 	}
-
-	public Musique modifier(String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.recherche(titre, artiste);
-
-		if (tableMusique != null) {
-			this.accesseurMusique.update(tableMusique.getIdMusique(), titre, artiste);
-			Musique musique = new MusiqueDTO();
-			musique.setIdMusique(tableMusique.getIdMusique());
-			musique.setTitre(tableMusique.getTitre());
-			musique.setArtiste(tableMusique.getArtiste());
-			musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-			return musique;
-		} else {
-			return null;
-		}
+	
+	public Musique modifier(long idMusique, String titre, String artiste) {
+		Musique musique = transcodeTableEnParam(idMusique, titre, artiste);
+		return this.modifier(musique);
 	}
-
-	public Musique modifier(long id, String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.select(id);
-
-		if (tableMusique != null) {
-			tableMusique = this.accesseurMusique.update(id, titre, artiste);
-			Musique musique = new MusiqueDTO();
-			musique.setIdMusique(tableMusique.getIdMusique());
-			musique.setTitre(tableMusique.getTitre());
-			musique.setArtiste(tableMusique.getArtiste());
-			musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-			return musique;
-		} else {
-			return null;
-		}
-	}
-
 	public Musique modifier(Musique musique) {
-		TableMusique tableMusique = this.accesseurMusique.select(musique.getIdMusique());
-
-		if (tableMusique != null) {
-			tableMusique = this.accesseurMusique.update(musique);
-			musique = new MusiqueDTO();
-			musique.setIdMusique(tableMusique.getIdMusique());
-			musique.setTitre(tableMusique.getTitre());
-			musique.setArtiste(tableMusique.getArtiste());
-			musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-			return musique;
-		} else {
-			return null;
-		}
+		TableMusique tableMusique = this.accesseurMusique.update(musique);
+		return transcodeTableEnDTO(tableMusique);
 	}
 
-	public List<Musique> liste() {
+	public List<Musique> lister() {
 		List<TableMusique> listeTableMusique = accesseurMusique.liste();
 		List<Musique> listeMusique = new ArrayList<>();
 
 		for (TableMusique tableMusique : listeTableMusique) {
-			Musique musique = new MusiqueParam();
-			musique.setIdMusique(tableMusique.getIdMusique());
-			musique.setTitre(tableMusique.getTitre());
-			musique.setArtiste(tableMusique.getArtiste());
-			musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
+			Musique musique = transcodeTableEnDTO(tableMusique);
 			listeMusique.add(musique);
 		}
 		return listeMusique;
 	}
 
-	public Musique prepareEdition(long id) {
-		TableMusique tableMusique = this.accesseurMusique.select(id);
+	public Musique prepareEdition(long idMusique) {
+		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
 		if (tableMusique != null) {
-			Musique musique = new MusiqueDTO();
-			musique.setIdMusique(tableMusique.getIdMusique());
-			musique.setTitre(tableMusique.getTitre());
-			musique.setArtiste(tableMusique.getArtiste());
-			musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
-			return musique;
+			return transcodeTableEnDTO(tableMusique);
 		} else {
 			return null;
 		}
 	}
+
+	public Musique transcodeTableEnDTO(TableMusique tableMusique) {
+		Musique musique = new MusiqueDTO();
+		musique.setIdMusique(tableMusique.getIdMusique());
+		musique.setTitre(tableMusique.getTitre());
+		musique.setArtiste(tableMusique.getArtiste());
+		musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
+		return musique;
+	}
+
+	public Musique transcodeTableEnParam(long idMusique, String titre, String artiste) {
+		Musique musique = transcodeTableEnParam(titre, artiste);
+		musique.setIdMusique(idMusique);
+		return musique;
+	}
+
+	public Musique transcodeTableEnParam(String titre, String artiste) {
+		Musique musique = new MusiqueParam();
+		musique.setTitre(titre);
+		musique.setArtiste(artiste);
+		musique.setListeUtilisateur(new ArrayList<>());
+		return musique;
+	}
+
 }

@@ -17,62 +17,44 @@ public class AccesseurMusique {
 
 	@PersistenceContext(unitName = "persistenceH2")
 	private EntityManager em;
-	
+
 	@EJB
 	private AccesseurUtilisateur accesseurUtilisateur;
 
-	public void insert(String titre, String artiste) {
-		System.out.println("AccesseurMusique:insert: titre="+titre+" artiste="+ artiste);
-		TableMusique tableMusique = new TableMusique();
-		tableMusique.setTitre(titre);
-		tableMusique.setArtiste(artiste);
-		this.em.persist(tableMusique);
-	}
-	
 	public void insert(Musique musique) {
+		if (this.recherche(musique) == null) {
 		TableMusique tableMusique = new TableMusique();
 		tableMusique.setTitre(musique.getTitre());
 		tableMusique.setArtiste(musique.getArtiste());
 		this.em.persist(tableMusique);
+		}
 	}
 
 	public TableMusique select(long idMusique) {
 		return this.em.find(TableMusique.class, idMusique);
 	}
 
-	public TableMusique recherche(String titre, String artiste) {
+	public TableMusique recherche(Musique musique) {
 		try {
 			TypedQuery<TableMusique> query = this.em
 					.createQuery("select a from TableMusique a where a.titre=?1 and a.artiste=?2 ", TableMusique.class);
 
-			query.setParameter(1, titre);
-			query.setParameter(2, artiste);
+			query.setParameter(1, musique.getTitre());
+			query.setParameter(2, musique.getArtiste());
 
 			return query.getSingleResult();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	public TableMusique update(long idMusique, String titre, String artiste) {
-		if (this.select(idMusique) != null) {
-			TableMusique tableMusique = new TableMusique();
-			tableMusique.setIdMusique(idMusique);
-			tableMusique.setTitre(titre);
-			tableMusique.setArtiste(artiste);
-			return this.em.merge(tableMusique);
-		} else {
-			return null;
-		}
-	}
-	
+
 	public TableMusique update(Musique musique) {
-		if (this.select(musique.getIdMusique()) != null) {
-			TableMusique tableMusique = new TableMusique();
-			tableMusique.setIdMusique(musique.getIdMusique());
+		TableMusique tableMusique = this.select(musique.getIdMusique());
+
+		if (tableMusique != null) {
 			tableMusique.setTitre(musique.getTitre());
 			tableMusique.setArtiste(musique.getArtiste());
-			tableMusique.setListeUtilisateur(musique.getListeUtilisateur());
 			return this.em.merge(tableMusique);
 		} else {
 			return null;
@@ -89,14 +71,14 @@ public class AccesseurMusique {
 	public List<TableMusique> liste() {
 		return this.em.createQuery("select a from TableMusique a").getResultList();
 	}
-	
+
 	public void ajouteUtilisateur(long idUtilisateur, long idMusique) {
 		TableMusique tableMusique = this.select(idMusique);
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
 		tableMusique.getListeUtilisateur().add(tableUtilisateur);
 		em.merge(tableMusique);
 	}
-	
+
 	public void supprimeUtilisateur(long idUtilisateur, long idMusique) {
 		TableMusique tableMusique = this.select(idMusique);
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);

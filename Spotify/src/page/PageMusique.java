@@ -18,10 +18,10 @@ public class PageMusique implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Musique musique;
-		
+
 	@ManagedProperty("#{param.musiqueId}")
 	private long musiqueId;
-	
+
 	@EJB
 	private MetierMusique metierMusique;
 
@@ -36,16 +36,12 @@ public class PageMusique implements Serializable {
 	public void supprimer() {
 		this.metierMusique.supprimer(this.musique.getTitre(), this.musique.getArtiste());
 	}
-	
-	public String supprimer(long id) {
-		this.metierMusique.supprimer(id);
-		return "listemusique";
-	}
-	
+
 	public void modifier() {
-		this.metierMusique.modifier(this.musique.getIdMusique(),this.musique.getTitre(), this.musique.getArtiste());
+		System.out.println("PageMusique:modifier(): id=" + this.musique.getIdMusique());
+		this.metierMusique.modifier(this.musique.getIdMusique(), this.musique.getTitre(), this.musique.getArtiste());
 	}
-	
+
 	public Musique getMusique() {
 		return musique;
 	}
@@ -53,7 +49,7 @@ public class PageMusique implements Serializable {
 	public void setMusique(Musique musique) {
 		this.musique = musique;
 	}
-	
+
 	public String prepareEdition() {
 		this.musique = this.metierMusique.prepareEdition(this.musiqueId);
 		if (this.musique != null) {
@@ -69,9 +65,9 @@ public class PageMusique implements Serializable {
 	public void setMusiqueId(long musiqueId) {
 		this.musiqueId = musiqueId;
 	}
-	
+
 	public String pageListemusique() {
 		return "listemusique";
 	}
-	
+
 }

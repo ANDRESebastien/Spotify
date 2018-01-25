@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 
 import metier.MetierMusique;
 import structure.Musique;
-import structure.MusiqueParam;
 
 @Path("/musique")
 public class RestMusique {
@@ -26,14 +25,14 @@ public class RestMusique {
 	@Path("/{idMusique}")
 	@Produces("application/json")
 	public Musique recherche(@PathParam("idMusique") long idMusique) {
-		return this.metierMusique.recherche(idMusique);
+		return this.metierMusique.rechercher(idMusique);
 	}
 
 	@GET
 	@Path("/")
 	@Produces("application/json")
 	public List<Musique> listeMusique() {
-		return this.metierMusique.liste();
+		return this.metierMusique.lister();
 	}
 
 	@POST
@@ -60,19 +59,15 @@ public class RestMusique {
 	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void update(Musique musique) {
-		this.metierMusique.modifier(musique.getIdMusique(), musique.getTitre(), musique.getArtiste());
+	public Musique update(Musique musique) {
+		return this.metierMusique.modifier(musique.getIdMusique(), musique.getTitre(), musique.getArtiste());
 	}
 
 	@PUT
 	@Path("/{idMusique}/{titre}/{artiste}")
 	@Produces("text/html")
-	public Musique modifie(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
+	public Musique update(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
 			@PathParam("artiste") String artiste) {
-		Musique musique = this.recherche(idMusique);
-		if (musique != null) {
-			musique = this.metierMusique.modifier(musique.getIdMusique(), titre, artiste);
-		}
-		return musique;
+		return this.metierMusique.modifier(idMusique, titre, artiste);
 	}
 }

@@ -24,16 +24,16 @@ public class PageListeMusique {
 	@PostConstruct
 	public void init() {
 		this.listeMusique = this.getListeMusique();
-		this.liste();
+		this.lister();
 	}
 
-	public String liste() {
-		this.listeMusique = this.metierMusique.liste();
+	public String lister() {
+		this.listeMusique = this.metierMusique.lister();
 		return "listemusique";
 	}
 	
-	public String delete(long id) {
-		this.metierMusique.supprimer(id);
+	public String supprimer(long idMusique) {
+		this.metierMusique.supprimer(idMusique);
 		return "listemusique";
 	}
 
