@@ -11,9 +11,9 @@
 		<p>
 			<h:outputLabel value="Nom utilisateur : " />
 			<h:inputText id="nom" label="nom"
-				value="#{metierUtilisateur.pageUtilisateur.nom}"
+				value="#{pageUtilisateur.utilisateur.nom}"
 				required="true" binding="#{nomBinding}">
-				<f:validator validatorId="nomValidator" />
+				<f:validator validatorId="controleNom" />
 			</h:inputText>
 			<h:message for="nom" />
 		</p>
@@ -21,9 +21,9 @@
 		<p>
 			<h:outputLabel value="Email : " />
 			<h:inputText id="email" label="email"
-				value="#{metierUtilisateur.pageUtilisateur.email}"
+				value="#{pageUtilisateur.utilisateur.email}"
 				required="true">
-				<f:validator validatorId="nomValidator" />
+				<f:validator validatorId="controleNom" />
 			</h:inputText>
 			<h:message for="nom" />
 		</p>
@@ -31,9 +31,9 @@
 		<p>
 			<h:outputLabel value="Mot de passe : " />
 			<h:inputSecret id="motDePasse" label="Mot de passe"
-				value="#{metierUtilisateur.pageUtilisateur.motDePasse}"
+				value="#{pageUtilisateur.utilisateur.motDePasse}"
 				required="true">
-				<f:validator validatorId="motDePasseValidator" />
+				<f:validator validatorId="controleMotDePasse" />
 				<f:attribute name="attributNom" />
 			</h:inputSecret>
 			<h:message for="motDePasse" />
@@ -45,12 +45,12 @@
 
 		<p>
 			<h:commandButton id="valider" label="bouton valider" value="Valider"
-				action="#{metierUtilisateur.aiguillage()}">
+				action="#{pageUtilisateur.valider()}">
 			</h:commandButton>
 
 			<h:column>
 				<h:commandButton id="connexion" label="bouton connexion"
-					value="Connexion" action="#{metierUtilisateur.connexion()}" />
+					value="Connexion" action="#{pageUtilisateur.connexion()}" />
 			</h:column>
 
 		</p>

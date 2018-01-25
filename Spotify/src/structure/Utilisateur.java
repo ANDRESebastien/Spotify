@@ -1,14 +1,21 @@
 package structure;
 
-public class Utilisateur {
+import java.util.ArrayList;
+import java.util.List;
+
+import table.TableMusique;
+
+abstract public class Utilisateur {
 
 	private long idUtilisateur;
 
 	private String nom;
-	
+
 	private String email;
 
 	private String motDePasse;
+
+	private List<TableMusique> listeMusique;
 
 	public long getIdUtilisateur() {
 		return idUtilisateur;
@@ -40,5 +47,16 @@ public class Utilisateur {
 
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
+	}
+
+	public List<TableMusique> getListeMusique() {
+		if (this.listeMusique == null) {
+			this.listeMusique = new ArrayList<>();
+		}
+		return listeMusique;
+	}
+
+	public void setListeMusique(List<TableMusique> listeMusique) {
+		this.listeMusique = listeMusique;
 	}
 }

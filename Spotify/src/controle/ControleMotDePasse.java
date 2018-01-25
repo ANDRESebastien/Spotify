@@ -1,4 +1,4 @@
-package controleur;
+package controle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -9,7 +9,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 @FacesValidator
-public class MotDePasseValidator implements Validator {
+public class ControleMotDePasse implements Validator {
 
 	public void validate(FacesContext contexte, UIComponent composant, Object oMotDePasse) throws ValidatorException {
 

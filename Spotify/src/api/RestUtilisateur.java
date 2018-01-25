@@ -12,27 +12,28 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import accesseur.AccesseurUtilisateur;
-import table.TableUtilisateur;
+import metier.MetierUtilisateur;
+import structure.Utilisateur;
+import structure.UtilisateurParam;
 
 @Path("/utilisateur")
 public class RestUtilisateur {
 
 	@EJB
-	private AccesseurUtilisateur accesseurUtilisateur;
+	private MetierUtilisateur metierUtilisateur;
 
 	@GET
 	@Path("/{idUtilisateur}")
 	@Produces("application/json")
-	public TableUtilisateur recherche(@PathParam("idUtilisateur") long idUtilisateur) {
-		return this.accesseurUtilisateur.select(idUtilisateur);
+	public Utilisateur recherche(@PathParam("idUtilisateur") long idUtilisateur) {
+		return this.metierUtilisateur.rechercher(idUtilisateur);
 	}
 
 	@GET
 	@Path("/")
 	@Produces("application/json")
-	public List<TableUtilisateur> listeUtilisateur() {
-		return this.accesseurUtilisateur.liste();
+	public List<Utilisateur> listeUtilisateur() {
+		return this.metierUtilisateur.liste();
 	}
 
 	@POST
@@ -40,60 +41,55 @@ public class RestUtilisateur {
 	@Produces("text/html")
 	public String ajoute(@PathParam("nom") String nom, @PathParam("email") String email,
 			@PathParam("motDePasse") String motDePasse) {
-		TableUtilisateur tableUtilisateur = new TableUtilisateur();
-		tableUtilisateur.setNom(nom);
-		tableUtilisateur.setEmail(email);
-		tableUtilisateur.setMotDePasse(motDePasse);
-		this.accesseurUtilisateur.insert(tableUtilisateur);
+		Utilisateur Utilisateur = new UtilisateurParam();
+		Utilisateur.setNom(nom);
+		Utilisateur.setEmail(email);
+		Utilisateur.setMotDePasse(motDePasse);
+		this.metierUtilisateur.ajoute(Utilisateur);
 		return "Ok";
 	}
 
 	@POST
 	@Path("/ajoute")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String ajoute(TableUtilisateur tableUtilisateur) {
-		this.accesseurUtilisateur.insert(tableUtilisateur);
+	public String ajoute(Utilisateur Utilisateur) {
+		this.metierUtilisateur.ajoute(Utilisateur);
 		return "Ok";
 	}
 
 	@POST
 	@Path("/supprime/{idUtilisateur}")
 	@Produces("text/html")
-	public String supprime(@PathParam("idUtilisateur") long idUtilisateur) {
-		return this.accesseurUtilisateur.delete(idUtilisateur);
+	public void supprime(@PathParam("idUtilisateur") long idUtilisateur) {
+		this.metierUtilisateur.supprimer(idUtilisateur);
 	}
 
 	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String update(TableUtilisateur TableUtilisateur) {
-		TableUtilisateur resultatUpdate = this.accesseurUtilisateur.update(TableUtilisateur);
-
-		if (resultatUpdate != null) {
-			return "Ok";
-		} else {
-			return "Ko";
-		}
+	public void update(Utilisateur utilisateur) {
+		this.metierUtilisateur.modifier(utilisateur);
 	}
 
 	@PUT
 	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
 	@Produces("text/html")
-	public String modifie(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
+	public Utilisateur modifie(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
 			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
 
 		System.out.println("RestUtilisateur:modifie:" + idUtilisateur);
-		TableUtilisateur tableUtilisateur = this.recherche(idUtilisateur);
-		tableUtilisateur.setNom(nom);
-		tableUtilisateur.setEmail(email);
-		tableUtilisateur.setMotDePasse(motDePasse);
-		TableUtilisateur resultatUpdate = this.accesseurUtilisateur.update(tableUtilisateur);
+		Utilisateur utilisateur = this.recherche(idUtilisateur);
+		utilisateur.setNom(nom);
+		utilisateur.setEmail(email);
+		utilisateur.setMotDePasse(motDePasse);
+		return this.metierUtilisateur.modifier(utilisateur);
 
-		if (resultatUpdate != null) {
-			return "Ok";
-		} else {
-			return "Ko";
-		}
 	}
 
+	@POST
+	@Path("/{idUtilisateur}/{idMusique}")
+	@Produces("text/html")
+	public void ajouteMusique(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("idMusique") long idMusique) {
+		this.metierUtilisateur.ajouteMusique(idUtilisateur,idMusique);
+	}
 }

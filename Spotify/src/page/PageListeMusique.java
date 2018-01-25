@@ -10,6 +10,7 @@ import javax.faces.bean.RequestScoped;
 
 import metier.MetierMusique;
 import structure.Musique;
+import structure.MusiqueParam;
 
 @ManagedBean
 @RequestScoped
@@ -22,7 +23,7 @@ public class PageListeMusique {
 
 	@PostConstruct
 	public void init() {
-		this.listeMusique = getListeMusique();
+		this.listeMusique = this.getListeMusique();
 		this.liste();
 	}
 
@@ -32,14 +33,10 @@ public class PageListeMusique {
 	}
 	
 	public String delete(long id) {
-		this.metierMusique.delete(id);
+		this.metierMusique.supprimer(id);
 		return "listemusique";
 	}
 
-	public String prepare(long id) {
-		this.musique = this.metierMusique.prepare(id);
-		return "musique";
-	}
 
 	public List<Musique> getListeMusique() {
 		if (this.listeMusique == null) {
@@ -56,7 +53,11 @@ public class PageListeMusique {
 		return musique;
 	}
 
-	public void setMusique(Musique musique) {
+	public void setMusique(MusiqueParam musique) {
 		this.musique = musique;
+	}
+	
+	public String pageMusique() {
+		return "musique";
 	}
 }

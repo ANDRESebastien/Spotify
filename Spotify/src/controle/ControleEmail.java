@@ -1,4 +1,4 @@
-package controleur;
+package controle;
 
 import java.util.regex.Pattern;
 
@@ -10,7 +10,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 @FacesValidator
-public class EmailValidator implements Validator {
+public class ControleEmail implements Validator {
 
 	public void validate(FacesContext contexte, UIComponent composant, Object oEmail) throws ValidatorException {
 		String email = (String) oEmail;

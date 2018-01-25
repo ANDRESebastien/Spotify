@@ -12,82 +12,67 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import accesseur.AccesseurMusique;
-import table.TableMusique;
+import metier.MetierMusique;
+import structure.Musique;
+import structure.MusiqueParam;
 
 @Path("/musique")
 public class RestMusique {
 
 	@EJB
-	private AccesseurMusique accesseurMusique;
+	private MetierMusique metierMusique;
 
 	@GET
 	@Path("/{idMusique}")
 	@Produces("application/json")
-	public TableMusique recherche(@PathParam("idMusique") long idMusique) {
-		return this.accesseurMusique.select(idMusique);
+	public Musique recherche(@PathParam("idMusique") long idMusique) {
+		return this.metierMusique.recherche(idMusique);
 	}
 
 	@GET
 	@Path("/")
 	@Produces("application/json")
-	public List<TableMusique> listeMusique() {
-		return this.accesseurMusique.liste();
+	public List<Musique> listeMusique() {
+		return this.metierMusique.liste();
 	}
 
 	@POST
 	@Path("/{titre}/{artiste}")
 	@Produces("text/html")
-	public String ajoute(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
-		this.accesseurMusique.insert(titre, artiste);
-		return "Ok";
+	public void ajoute(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
+		this.metierMusique.ajouter(titre, artiste);
 	}
 
 	@POST
 	@Path("/ajoute")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String ajoute(TableMusique tableMusique) {
-		this.accesseurMusique.insert(tableMusique.getTitre(),tableMusique.getArtiste());
-		return "Ok";
+	public void ajoute(Musique musique) {
+		this.metierMusique.ajouter(musique.getTitre(), musique.getArtiste());
 	}
 
 	@POST
 	@Path("/supprime/{idMusique}")
 	@Produces("text/html")
-	public String supprime(@PathParam("idMusique") long idMusique) {
-		return this.accesseurMusique.delete(idMusique);
+	public void supprime(@PathParam("idMusique") long idMusique) {
+		this.metierMusique.supprimer(idMusique);
 	}
 
 	@POST
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String update(TableMusique TableMusique) {
-		TableMusique resultatUpdate = this.accesseurMusique.update(TableMusique);
-
-		if (resultatUpdate != null) {
-			return "Ok";
-		} else {
-			return "Ko";
-		}
+	public void update(Musique musique) {
+		this.metierMusique.modifier(musique.getIdMusique(), musique.getTitre(), musique.getArtiste());
 	}
 
 	@PUT
 	@Path("/{idMusique}/{titre}/{artiste}")
 	@Produces("text/html")
-	public String modifie(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
+	public Musique modifie(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
 			@PathParam("artiste") String artiste) {
-
-		System.out.println("RestMusique:modifie:" + idMusique);
-		TableMusique tableMusique = this.recherche(idMusique);
-		tableMusique.setTitre(titre);
-		tableMusique.setArtiste(artiste);
-		TableMusique resultatUpdate = this.accesseurMusique.update(tableMusique);
-
-		if (resultatUpdate != null) {
-			return "Ok";
-		} else {
-			return "Ko";
+		Musique musique = this.recherche(idMusique);
+		if (musique != null) {
+			musique = this.metierMusique.modifier(musique.getIdMusique(), titre, artiste);
 		}
+		return musique;
 	}
-
 }

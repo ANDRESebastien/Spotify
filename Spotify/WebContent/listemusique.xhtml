@@ -9,22 +9,24 @@
 	<h:form id="listeMusiqueForm">
 		<h1>Liste musique</h1>
 
-		<h:dataTable value="#{pageListeMusique.listeMusique}" var="liste">
+		<h:dataTable value="#{pageListeMusique.listeMusique}" var="musique">
 			<h:column>
-				<h:inputHidden value="#{liste.idMusique}" />
+				<h:inputHidden value="#{musique.idMusique}" />
 			</h:column>
-			<h:column>#{liste.titre}</h:column>
-			<h:column>#{liste.artiste}</h:column>
+			<h:column>#{musique.titre}</h:column>
+			<h:column>#{musique.artiste}</h:column>
 			<h:column>
 				<h:commandButton value="Supprimer"
-					action="#{pageListeMusique.delete(liste.idMusique)}" />
+					action="#{pageListeMusique.delete(musique.idMusique)}" />
 			</h:column>
 			<h:column>
 				<h:commandButton value="Edition"
-					action="#{pageListeMusique.prepare(liste.idMusique)}" />
+					action="#{pageMusique.prepareEdition()}">
+					<f:param name="musiqueId" value="#{musique.idMusique}" />
+				</h:commandButton>
 			</h:column>
 		</h:dataTable>
-		<h:commandButton value="Retour" action="musique" />
+		<h:commandButton value="Retour" action="#{pageListeMusique.pageMusique()}" />
 	</h:form>
 </h:body>
 </html>

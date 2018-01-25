@@ -1,52 +1,79 @@
 package page;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+
+import metier.MetierUtilisateur;
+import structure.Utilisateur;
+import structure.UtilisateurParam;
 
 @ManagedBean
 @RequestScoped
 public class PageUtilisateur implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
-	private long idUtilisateur;
+	private Utilisateur utilisateur;
 
-	private String nom;
-	
-	private String email;
+	@EJB
+	private MetierUtilisateur metierUtilisateur;
 
-	private String motDePasse;
-
-	public long getIdUtilisateur() {
-		return idUtilisateur;
+	public PageUtilisateur() {
+		this.utilisateur = new UtilisateurParam();
 	}
 
-	public void setIdUtilisateur(long idUtilisateur) {
-		this.idUtilisateur = idUtilisateur;
+	public String supprimer(long id) {
+		this.metierUtilisateur.supprimer(id);
+		return "listenom";
 	}
 
-	public String getNom() {
-		return nom;
+	public String valider() {
+		String action = "";
+
+		Utilisateur resultat = this.metierUtilisateur.rechercher(this.utilisateur);
+		if (resultat != null) {
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("Form:nom",
+					new FacesMessage(" Le nom utilisateur est déjà présent en base."));
+			action = "utilisateur";
+		} else {
+			this.metierUtilisateur.ajoute(this.utilisateur);
+			action = "listeutilisateur";
+		}
+		return action;
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public String connexion() {
+		String action = "";
+		System.out.println("AdministrationBackingBean:connexion: Bean => nom = " + this.utilisateur.getNom() + " mdp = "
+				+ this.utilisateur.getMotDePasse());
+
+		Utilisateur resultat = this.metierUtilisateur.rechercher(this.utilisateur.getIdUtilisateur());
+
+		if (resultat != null && this.utilisateur.getNom().equals(resultat.getNom())
+				&& this.utilisateur.getMotDePasse().equals(resultat.getMotDePasse())) {
+			action = "acceuil";
+		} else {
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("administrationForm:global",
+					new FacesMessage(" Le nom utilisateur et/ou mot de passe éronné."));
+			action = "index";
+		}
+		return action;
 	}
 
-	public String getEmail() {
-		return email;
+	public List<Utilisateur> liste() {
+		return metierUtilisateur.liste();
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
 	}
 
-	public String getMotDePasse() {
-		return motDePasse;
-	}
-
-	public void setMotDePasse(String motDePasse) {
-		this.motDePasse = motDePasse;
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
 	}
 }

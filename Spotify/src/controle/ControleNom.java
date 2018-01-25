@@ -1,4 +1,4 @@
-package controleur;
+package controle;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -8,7 +8,7 @@ import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
 @FacesValidator
-public class ControleurNom implements Validator {
+public class ControleNom implements Validator {
 
 	public void validate(FacesContext contexte, UIComponent composant, Object oNom) throws ValidatorException {
 		String nom = (String) oNom;
