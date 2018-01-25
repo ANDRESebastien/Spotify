@@ -2,6 +2,7 @@ package accesseur;
 
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -9,12 +10,16 @@ import javax.persistence.TypedQuery;
 
 import structure.Musique;
 import table.TableMusique;
+import table.TableUtilisateur;
 
 @Stateless
 public class AccesseurMusique {
 
 	@PersistenceContext(unitName = "persistenceH2")
 	private EntityManager em;
+	
+	@EJB
+	private AccesseurUtilisateur accesseurUtilisateur;
 
 	public void insert(String titre, String artiste) {
 		System.out.println("AccesseurMusique:insert: titre="+titre+" artiste="+ artiste);
@@ -83,5 +88,19 @@ public class AccesseurMusique {
 
 	public List<TableMusique> liste() {
 		return this.em.createQuery("select a from TableMusique a").getResultList();
+	}
+	
+	public void ajouteUtilisateur(long idUtilisateur, long idMusique) {
+		TableMusique tableMusique = this.select(idMusique);
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
+		tableMusique.getListeUtilisateur().add(tableUtilisateur);
+		em.merge(tableMusique);
+	}
+	
+	public void supprimeUtilisateur(long idUtilisateur, long idMusique) {
+		TableMusique tableMusique = this.select(idMusique);
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
+		tableMusique.getListeUtilisateur().remove(tableUtilisateur);
+		em.merge(tableMusique);
 	}
 }

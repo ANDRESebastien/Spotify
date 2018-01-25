@@ -56,11 +56,11 @@ public class PageUtilisateur implements Serializable {
 
 		if (resultat != null && this.utilisateur.getNom().equals(resultat.getNom())
 				&& this.utilisateur.getMotDePasse().equals(resultat.getMotDePasse())) {
-			action = "acceuil";
+			action = "listeutilisateur";
 		} else {
 			javax.faces.context.FacesContext.getCurrentInstance().addMessage("administrationForm:global",
 					new FacesMessage(" Le nom utilisateur et/ou mot de passe éronné."));
-			action = "index";
+			action = "utilisateur";
 		}
 		return action;
 	}

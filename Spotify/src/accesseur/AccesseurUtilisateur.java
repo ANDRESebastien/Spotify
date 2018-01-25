@@ -70,5 +70,14 @@ public class AccesseurUtilisateur {
 	public void ajouteMusique(long idUtilisateur, long idMusique) {
 		TableUtilisateur tableUtilisateur = this.select(idUtilisateur);
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
+		tableUtilisateur.getListeMusique().add(tableMusique);
+		em.merge(tableUtilisateur);
+	}
+	
+	public void supprimeMusique(long idUtilisateur, long idMusique) {
+		TableUtilisateur tableUtilisateur = this.select(idUtilisateur);
+		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
+		tableUtilisateur.getListeMusique().remove(tableMusique);
+		em.merge(tableUtilisateur);
 	}
 }

@@ -23,9 +23,9 @@
 			<h:inputText id="email" label="email"
 				value="#{pageUtilisateur.utilisateur.email}"
 				required="true">
-				<f:validator validatorId="controleNom" />
+				<f:validator validatorId="controleEmail" />
 			</h:inputText>
-			<h:message for="nom" />
+			<h:message for="email" />
 		</p>
 
 		<p>
@@ -34,7 +34,7 @@
 				value="#{pageUtilisateur.utilisateur.motDePasse}"
 				required="true">
 				<f:validator validatorId="controleMotDePasse" />
-				<f:attribute name="attributNom" />
+				<f:attribute name="attributNom" value="#{nomBinding}" />
 			</h:inputSecret>
 			<h:message for="motDePasse" />
 		</p>
