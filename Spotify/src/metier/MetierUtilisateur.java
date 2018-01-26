@@ -91,7 +91,6 @@ public class MetierUtilisateur implements Serializable {
 			utilisateur.getListeMusique().add(tableMusique);
 		}
 
-		utilisateur.setListeMusique(tableUtilisateur.getListeMusique());
 		return utilisateur;
 	}
 

@@ -77,6 +77,7 @@ public class AccesseurMusique {
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
 		if (tableMusique != null && tableUtilisateur != null) {
 			tableMusique.getListeUtilisateur().add(tableUtilisateur);
+			tableUtilisateur.getListeMusique().add(tableMusique);
 			this.em.persist(tableMusique);
 		}
 	}
@@ -86,6 +87,7 @@ public class AccesseurMusique {
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
 		if (tableMusique != null && tableUtilisateur != null) {
 			tableMusique.getListeUtilisateur().remove(tableUtilisateur);
+			tableUtilisateur.getListeMusique().remove(tableMusique);
 			this.em.persist(tableMusique);
 		}
 	}

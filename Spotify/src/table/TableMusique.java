@@ -28,7 +28,7 @@ public class TableMusique {
 	private String artiste;
 
 	@Column
-	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<TableUtilisateur> listeUtilisateur;
 
 	public TableMusique() {

@@ -92,9 +92,9 @@ public class MetierMusique implements Serializable {
 		musique.setTitre(tableMusique.getTitre());
 		musique.setArtiste(tableMusique.getArtiste());
 
-		for (TableUtilisateur listeUtilisateur : tableMusique.getListeUtilisateur()) {
-			listeUtilisateur.setListeMusique(null);
-			musique.getListeUtilisateur().add(listeUtilisateur);
+		for (TableUtilisateur tableUtilisateur : tableMusique.getListeUtilisateur()) {
+			tableUtilisateur.setListeMusique(null);
+			musique.getListeUtilisateur().add(tableUtilisateur);
 		}
 		return musique;
 	}
