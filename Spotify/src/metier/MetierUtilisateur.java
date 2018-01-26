@@ -60,7 +60,7 @@ public class MetierUtilisateur implements Serializable {
 	}
 
 	public List<Utilisateur> lister() {
-		List<TableUtilisateur> listeTableUtilisateur = accesseurUtilisateur.liste();
+		List<TableUtilisateur> listeTableUtilisateur = accesseurUtilisateur.lister();
 		List<Utilisateur> listeUtilisateur = new ArrayList<>();
 
 		for (TableUtilisateur tableUtilisateur : listeTableUtilisateur) {

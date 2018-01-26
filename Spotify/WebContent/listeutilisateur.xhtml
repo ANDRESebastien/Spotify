@@ -9,21 +9,26 @@
 	<h:form id="listeUtilisateurForm">
 		<h1>Liste utilisateur</h1>
 
-		<h:dataTable value="#{metierUtilisateur.listeutilisateur}" var="liste">
-			<ol>
-				<li><h:column>#{liste.titre}</h:column></li>
-				<li><h:column>#{liste.artiste}</h:column></li>
-			</ol>
+		<h:dataTable value="#{pageListeUtilisateur.listeUtilisateur}"
+			var="utilisateur">
+			<h:column>
+				<h:inputHidden value="#{utilisateur.idUtilisateur}" />
+			</h:column>
+			<h:column>#{utilisateur.nom}</h:column>
+			<h:column>#{utilisateur.email}</h:column>
 			<h:column>
 				<h:commandButton value="Supprimer"
-					action="#{metierUtilisateur.delete(liste.idUtilisateur)}" />
+					action="#{pageListeUtilisateur.supprimer(utilisateur.idUtilisateur)}" />
 			</h:column>
 			<h:column>
 				<h:commandButton value="Edition"
-					action="#{metierUtilisateur.prepare(liste.idUtilisateur)}" />
+					action="#{pageUtilisateur.preparerEdition()}">
+					<f:param name="utilisateurId" value="#{utilisateur.idUtilisateur}" />
+				</h:commandButton>
 			</h:column>
 		</h:dataTable>
-		<h:commandButton value="Retour" action="utilisateur" />
+		<h:commandButton value="Retour"
+			action="#{pageListeUtilisateur.pageUtilisateur()}" />
 	</h:form>
 </h:body>
 </html>

@@ -38,15 +38,18 @@ public class PageMusique implements Serializable {
 		this.metierMusique.supprimer(this.musique.getTitre(), this.musique.getArtiste());
 	}
 
-	public void modifier() {
-		System.out.println("PageMusique:modifier(): id=" + this.musique.getIdMusique());
+	public String modifier() {
+		String action = "";
 		
 		if (this.musique.getIdMusique() > 0) {
 			this.metierMusique.modifier(this.musique.getIdMusique(), this.musique.getTitre(), this.musique.getArtiste());
+			action = "listemusique";
 		} else {
 			javax.faces.context.FacesContext.getCurrentInstance().addMessage("musiqueForm:global",
 					new FacesMessage(" Pour modifier, merci de séléctionner une musique via la liste."));
+			action = "musique";
 		}
+		return action;
 	}
 
 	public Musique getMusique() {

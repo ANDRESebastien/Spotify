@@ -67,7 +67,7 @@ public class AccesseurUtilisateur {
 		}
 	}
 
-	public List<TableUtilisateur> liste() {
+	public List<TableUtilisateur> lister() {
 		return this.em.createQuery("select a from TableUtilisateur a").getResultList();
 	}
 

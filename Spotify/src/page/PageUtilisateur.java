@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 
 import metier.MetierUtilisateur;
@@ -19,6 +20,9 @@ public class PageUtilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Utilisateur utilisateur;
+	
+	@ManagedProperty("#{param.utilisateurId}")
+	private long utilisateurId;
 
 	@EJB
 	private MetierUtilisateur metierUtilisateur;
@@ -63,6 +67,17 @@ public class PageUtilisateur implements Serializable {
 			action = "utilisateur";
 		}
 		return action;
+	}
+	
+	public String preparerEdition() {
+		//A FAIRE
+		/*
+		this.utilisateur = this.metierUtilisateur.preparerEdition(this.utilisateurId);
+		if (this.utilisateur != null) {
+			return "musique";
+		}
+		*/
+		return null;
 	}
 
 	public List<Utilisateur> lister() {

@@ -1,44 +1,54 @@
 package page;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+
+import metier.MetierUtilisateur;
+import structure.Utilisateur;
+
 public class PageListeUtilisateur {
 
-	private long idUtilisateur;
+	private Utilisateur utilisateur;
+	private List<Utilisateur> listeUtilisateur;
 
-	private String nom;
-	
-	private String email;
+	@EJB
+	private MetierUtilisateur metierUtilisateur;
 
-	private String motDePasse;
-
-	public long getIdUtilisateur() {
-		return idUtilisateur;
+	@PostConstruct
+	public void init() {
+		this.listeUtilisateur = this.getListeUtilisateur();
+		this.lister();
 	}
 
-	public void setIdUtilisateur(long idUtilisateur) {
-		this.idUtilisateur = idUtilisateur;
+	public String lister() {
+		this.listeUtilisateur = this.metierUtilisateur.lister();
+		return "listeutilisateur";
 	}
 
-	public String getNom() {
-		return nom;
+	public String supprimer(long idUtilisateur) {
+		this.metierUtilisateur.supprimer(idUtilisateur);
+		return "listeutilisateur";
 	}
 
-	public void setNom(String nom) {
-		this.nom = nom;
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
 	}
 
-	public String getEmail() {
-		return email;
+	public void setUtilisateur(Utilisateur utilisateur) {
+		this.utilisateur = utilisateur;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public List<Utilisateur> getListeUtilisateur() {
+		if (this.listeUtilisateur == null) {
+			this.listeUtilisateur = new ArrayList<>();
+		}
+		return this.listeUtilisateur;
 	}
 
-	public String getMotDePasse() {
-		return motDePasse;
-	}
-
-	public void setMotDePasse(String motDePasse) {
-		this.motDePasse = motDePasse;
+	public void setListeUtilisateur(List<Utilisateur> listeUtilisateur) {
+		this.listeUtilisateur = listeUtilisateur;
 	}
 }
