@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -25,71 +26,66 @@ public class RestUtilisateur {
 	@GET
 	@Path("/{idUtilisateur}")
 	@Produces("application/json")
-	public Utilisateur recherche(@PathParam("idUtilisateur") long idUtilisateur) {
+	public Utilisateur rechercher(@PathParam("idUtilisateur") long idUtilisateur) {
 		return this.metierUtilisateur.rechercher(idUtilisateur);
 	}
 
 	@GET
 	@Path("/")
 	@Produces("application/json")
-	public List<Utilisateur> listeUtilisateur() {
-		return this.metierUtilisateur.liste();
+	public List<Utilisateur> listerUtilisateur() {
+		return this.metierUtilisateur.lister();
 	}
 
 	@POST
 	@Path("/{nom}/{email}/{motDePasse}")
-	@Produces("text/html")
-	public String ajoute(@PathParam("nom") String nom, @PathParam("email") String email,
+	public void ajouter(@PathParam("nom") String nom, @PathParam("email") String email,
 			@PathParam("motDePasse") String motDePasse) {
-		Utilisateur Utilisateur = new UtilisateurParam();
-		Utilisateur.setNom(nom);
-		Utilisateur.setEmail(email);
-		Utilisateur.setMotDePasse(motDePasse);
-		this.metierUtilisateur.ajoute(Utilisateur);
-		return "Ok";
+		this.metierUtilisateur.ajouter(nom, email, motDePasse);
 	}
 
 	@POST
 	@Path("/ajoute")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String ajoute(Utilisateur Utilisateur) {
-		this.metierUtilisateur.ajoute(Utilisateur);
+	public String ajouter(Utilisateur Utilisateur) {
+		this.metierUtilisateur.ajouter(Utilisateur);
 		return "Ok";
 	}
 
-	@POST
-	@Path("/supprime/{idUtilisateur}")
+	@PUT
+	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
 	@Produces("text/html")
-	public void supprime(@PathParam("idUtilisateur") long idUtilisateur) {
-		this.metierUtilisateur.supprimer(idUtilisateur);
+	public Utilisateur modifier(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
+			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
+		return this.metierUtilisateur.modifier(idUtilisateur, nom, email, motDePasse);
 	}
 
 	@POST
+	@Path("/musique/{idUtilisateur}/{idMusique}")
+	@Produces("text/html")
+	public void ajouterMusique(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("idMusique") long idMusique) {
+		this.metierUtilisateur.ajouterMusique(idUtilisateur, idMusique);
+	}
+
+	@PUT
 	@Path("/update")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void update(Utilisateur utilisateur) {
 		this.metierUtilisateur.modifier(utilisateur);
 	}
 
-	@PUT
-	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
+	@DELETE
+	@Path("/{idUtilisateur}")
 	@Produces("text/html")
-	public Utilisateur modifie(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
-			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
-
-		System.out.println("RestUtilisateur:modifie:" + idUtilisateur);
-		Utilisateur utilisateur = this.recherche(idUtilisateur);
-		utilisateur.setNom(nom);
-		utilisateur.setEmail(email);
-		utilisateur.setMotDePasse(motDePasse);
-		return this.metierUtilisateur.modifier(utilisateur);
-
+	public void supprimer(@PathParam("idUtilisateur") long idUtilisateur) {
+		this.metierUtilisateur.supprimer(idUtilisateur);
 	}
 
-	@POST
-	@Path("/{idUtilisateur}/{idMusique}")
+	@DELETE
+	@Path("/musique/{idUtilisateur}/{idMusique}")
 	@Produces("text/html")
-	public void ajouteMusique(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("idMusique") long idMusique) {
-		this.metierUtilisateur.ajouteMusique(idUtilisateur,idMusique);
+	public void supprimerMusique(@PathParam("idUtilisateur") long idUtilisateur,
+			@PathParam("idMusique") long idMusique) {
+		this.metierUtilisateur.supprimerMusique(idUtilisateur, idMusique);
 	}
 }

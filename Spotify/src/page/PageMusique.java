@@ -3,6 +3,7 @@ package page;
 import java.io.Serializable;
 
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -39,7 +40,13 @@ public class PageMusique implements Serializable {
 
 	public void modifier() {
 		System.out.println("PageMusique:modifier(): id=" + this.musique.getIdMusique());
-		this.metierMusique.modifier(this.musique.getIdMusique(), this.musique.getTitre(), this.musique.getArtiste());
+		
+		if (this.musique.getIdMusique() > 0) {
+			this.metierMusique.modifier(this.musique.getIdMusique(), this.musique.getTitre(), this.musique.getArtiste());
+		} else {
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("musiqueForm:global",
+					new FacesMessage(" Pour modifier, merci de séléctionner une musique via la liste."));
+		}
 	}
 
 	public Musique getMusique() {
@@ -50,8 +57,8 @@ public class PageMusique implements Serializable {
 		this.musique = musique;
 	}
 
-	public String prepareEdition() {
-		this.musique = this.metierMusique.prepareEdition(this.musiqueId);
+	public String preparerEdition() {
+		this.musique = this.metierMusique.preparerEdition(this.musiqueId);
 		if (this.musique != null) {
 			return "musique";
 		}

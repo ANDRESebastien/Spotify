@@ -12,6 +12,7 @@ import structure.Musique;
 import structure.MusiqueDTO;
 import structure.MusiqueParam;
 import table.TableMusique;
+import table.TableUtilisateur;
 
 @Stateless
 public class MetierMusique implements Serializable {
@@ -25,21 +26,24 @@ public class MetierMusique implements Serializable {
 	}
 
 	public Musique rechercher(long idMusique) {
-		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
-		return transcodeTableEnDTO(tableMusique);
+		return transcodeTableEnDTO(this.accesseurMusique.select(idMusique));
 	}
 
-	public Musique recherche(String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.recherche(transcodeTableEnParam(titre, artiste));
-		return transcodeTableEnDTO(tableMusique);
+	public Musique rechercher(String titre, String artiste) {
+		return this.rechercher(transcodeTableEnParam(titre, artiste));
+	}
+	
+	public Musique rechercher(Musique musique) {
+		return transcodeTableEnDTO(this.accesseurMusique.rechercher(musique));
 	}
 
 	public void supprimer(String titre, String artiste) {
-		TableMusique tableMusique = this.accesseurMusique.recherche(transcodeTableEnParam(titre, artiste));
+		TableMusique tableMusique = this.accesseurMusique.rechercher(transcodeTableEnParam(titre, artiste));
 		if (tableMusique != null) {
-			this.accesseurMusique.delete(tableMusique.getIdMusique());
+			this.supprimer(tableMusique.getIdMusique());
 		}
 	}
+
 	public void supprimer(long idMusique) {
 		this.accesseurMusique.delete(idMusique);
 	}
@@ -48,6 +52,7 @@ public class MetierMusique implements Serializable {
 		Musique musique = transcodeTableEnParam(idMusique, titre, artiste);
 		return this.modifier(musique);
 	}
+
 	public Musique modifier(Musique musique) {
 		TableMusique tableMusique = this.accesseurMusique.update(musique);
 		return transcodeTableEnDTO(tableMusique);
@@ -64,7 +69,7 @@ public class MetierMusique implements Serializable {
 		return listeMusique;
 	}
 
-	public Musique prepareEdition(long idMusique) {
+	public Musique preparerEdition(long idMusique) {
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
 		if (tableMusique != null) {
 			return transcodeTableEnDTO(tableMusique);
@@ -73,12 +78,24 @@ public class MetierMusique implements Serializable {
 		}
 	}
 
+	public void ajouterUtilisateur(long idMusique, long idUtilisateur) {
+		this.accesseurMusique.ajouterUtilisateur(idMusique, idUtilisateur);
+	}
+
+	public void supprimerUtilisateur(long idMusique, long idUtilisateur) {
+		this.accesseurMusique.supprimerUtilisateur(idMusique, idUtilisateur);
+	}
+
 	public Musique transcodeTableEnDTO(TableMusique tableMusique) {
 		Musique musique = new MusiqueDTO();
 		musique.setIdMusique(tableMusique.getIdMusique());
 		musique.setTitre(tableMusique.getTitre());
 		musique.setArtiste(tableMusique.getArtiste());
-		musique.setListeUtilisateur(tableMusique.getListeUtilisateur());
+
+		for (TableUtilisateur listeUtilisateur : tableMusique.getListeUtilisateur()) {
+			listeUtilisateur.setListeMusique(null);
+			musique.getListeUtilisateur().add(listeUtilisateur);
+		}
 		return musique;
 	}
 
@@ -95,5 +112,4 @@ public class MetierMusique implements Serializable {
 		musique.setListeUtilisateur(new ArrayList<>());
 		return musique;
 	}
-
 }

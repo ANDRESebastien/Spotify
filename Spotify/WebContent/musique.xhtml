@@ -33,14 +33,10 @@
 				action="#{pageMusique.ajouter()}" />
 			<h:commandButton id="supprimer" label="bouton supprimer"
 				value="Supprimer" action="#{pageMusique.supprimer()}" />
-			<c:choose>
-				<c:when test="#{pageMusique.musique.idMusique > 0}">
-					<h:commandButton id="modifier" label="bouton modifier"
-						value="Modifier" action="#{pageMusique.modifier()}">
-						</h:commandButton>
-				</c:when>
-				<c:otherwise />
-			</c:choose>
+
+			<h:commandButton id="modifier" label="bouton modifier"
+				value="Modifier" action="#{pageMusique.modifier()}">
+			</h:commandButton>
 		</p>
 
 	</h:form>

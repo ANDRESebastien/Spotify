@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -24,43 +25,44 @@ public class RestMusique {
 	@GET
 	@Path("/{idMusique}")
 	@Produces("application/json")
-	public Musique recherche(@PathParam("idMusique") long idMusique) {
+	public Musique rechercher(@PathParam("idMusique") long idMusique) {
 		return this.metierMusique.rechercher(idMusique);
+	}
+
+	@GET
+	@Path("/{titre}/{artiste}")
+	@Produces("application/json")
+	public Musique rechercher(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
+		return this.metierMusique.rechercher(titre, artiste);
 	}
 
 	@GET
 	@Path("/")
 	@Produces("application/json")
-	public List<Musique> listeMusique() {
+	public List<Musique> listerMusique() {
 		return this.metierMusique.lister();
 	}
 
 	@POST
 	@Path("/{titre}/{artiste}")
 	@Produces("text/html")
-	public void ajoute(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
+	public void ajouter(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
 		this.metierMusique.ajouter(titre, artiste);
 	}
 
 	@POST
-	@Path("/ajoute")
+	@Path("/ajouter")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void ajoute(Musique musique) {
+	public void ajouter(Musique musique) {
 		this.metierMusique.ajouter(musique.getTitre(), musique.getArtiste());
 	}
 
 	@POST
-	@Path("/supprime/{idMusique}")
+	@Path("/utilisateur/{idMusique}/{idUtilisateur}")
 	@Produces("text/html")
-	public void supprime(@PathParam("idMusique") long idMusique) {
-		this.metierMusique.supprimer(idMusique);
-	}
-
-	@POST
-	@Path("/update")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Musique update(Musique musique) {
-		return this.metierMusique.modifier(musique.getIdMusique(), musique.getTitre(), musique.getArtiste());
+	public void ajouterutilisateur(@PathParam("idMusique") long idMusique,
+			@PathParam("idUtilisateur") long idUtilisateur) {
+		this.metierMusique.ajouterUtilisateur(idMusique, idUtilisateur);
 	}
 
 	@PUT
@@ -69,5 +71,27 @@ public class RestMusique {
 	public Musique update(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
 			@PathParam("artiste") String artiste) {
 		return this.metierMusique.modifier(idMusique, titre, artiste);
+	}
+
+	@DELETE
+	@Path("/{idMusique}")
+	@Produces("text/html")
+	public void supprimer(@PathParam("idMusique") long idMusique) {
+		this.metierMusique.supprimer(idMusique);
+	}
+
+	@DELETE
+	@Path("/update")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Musique update(Musique musique) {
+		return this.metierMusique.modifier(musique.getIdMusique(), musique.getTitre(), musique.getArtiste());
+	}
+
+	@DELETE
+	@Path("/utilisateur/{idMusique}/{idUtilisateur}")
+	@Produces("text/html")
+	public void supprimerutilisateur(@PathParam("idMusique") long idMusique,
+			@PathParam("idUtilisateur") long idUtilisateur) {
+		this.metierMusique.supprimerUtilisateur(idMusique, idUtilisateur);
 	}
 }

@@ -22,11 +22,11 @@ public class AccesseurMusique {
 	private AccesseurUtilisateur accesseurUtilisateur;
 
 	public void insert(Musique musique) {
-		if (this.recherche(musique) == null) {
-		TableMusique tableMusique = new TableMusique();
-		tableMusique.setTitre(musique.getTitre());
-		tableMusique.setArtiste(musique.getArtiste());
-		this.em.persist(tableMusique);
+		if (this.rechercher(musique) == null) {
+			TableMusique tableMusique = new TableMusique();
+			tableMusique.setTitre(musique.getTitre());
+			tableMusique.setArtiste(musique.getArtiste());
+			this.em.persist(tableMusique);
 		}
 	}
 
@@ -34,7 +34,7 @@ public class AccesseurMusique {
 		return this.em.find(TableMusique.class, idMusique);
 	}
 
-	public TableMusique recherche(Musique musique) {
+	public TableMusique rechercher(Musique musique) {
 		try {
 			TypedQuery<TableMusique> query = this.em
 					.createQuery("select a from TableMusique a where a.titre=?1 and a.artiste=?2 ", TableMusique.class);
@@ -72,17 +72,21 @@ public class AccesseurMusique {
 		return this.em.createQuery("select a from TableMusique a").getResultList();
 	}
 
-	public void ajouteUtilisateur(long idUtilisateur, long idMusique) {
+	public void ajouterUtilisateur(long idMusique, long idUtilisateur) {
 		TableMusique tableMusique = this.select(idMusique);
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
-		tableMusique.getListeUtilisateur().add(tableUtilisateur);
-		em.merge(tableMusique);
+		if (tableMusique != null && tableUtilisateur != null) {
+			tableMusique.getListeUtilisateur().add(tableUtilisateur);
+			this.em.persist(tableMusique);
+		}
 	}
 
-	public void supprimeUtilisateur(long idUtilisateur, long idMusique) {
+	public void supprimerUtilisateur(long idMusique, long idUtilisateur) {
 		TableMusique tableMusique = this.select(idMusique);
 		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
-		tableMusique.getListeUtilisateur().remove(tableUtilisateur);
-		em.merge(tableMusique);
+		if (tableMusique != null && tableUtilisateur != null) {
+			tableMusique.getListeUtilisateur().remove(tableUtilisateur);
+			this.em.persist(tableMusique);
+		}
 	}
 }

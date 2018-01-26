@@ -1,5 +1,6 @@
 package accesseur;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -17,12 +18,17 @@ public class AccesseurUtilisateur {
 
 	@PersistenceContext(unitName = "persistenceH2")
 	private EntityManager em;
-	
+
 	@EJB
 	private AccesseurMusique accesseurMusique;
 
 	public void insert(Utilisateur utilisateur) {
-		this.em.persist(utilisateur);
+		TableUtilisateur tableUtilisateur = new TableUtilisateur();
+		tableUtilisateur.setNom(utilisateur.getNom());
+		tableUtilisateur.setEmail(utilisateur.getEmail());
+		tableUtilisateur.setMotDePasse(utilisateur.getEmail());
+		tableUtilisateur.setListeMusique(new ArrayList<>());
+		this.em.persist(tableUtilisateur);
 	}
 
 	public TableUtilisateur select(long idUtilisateur) {
@@ -67,17 +73,23 @@ public class AccesseurUtilisateur {
 		return this.em.createQuery("select a from TableUtilisateur a").getResultList();
 	}
 
-	public void ajouteMusique(long idUtilisateur, long idMusique) {
+	public void ajouterMusique(long idUtilisateur, long idMusique) {
 		TableUtilisateur tableUtilisateur = this.select(idUtilisateur);
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
-		tableUtilisateur.getListeMusique().add(tableMusique);
-		em.merge(tableUtilisateur);
+		if (tableUtilisateur != null && tableMusique != null) {
+			tableUtilisateur.getListeMusique().add(tableMusique);
+			//tableMusique.getListeUtilisateur().add(tableUtilisateur);
+			this.em.persist(tableUtilisateur);
+		}
 	}
-	
-	public void supprimeMusique(long idUtilisateur, long idMusique) {
+
+	public void supprimerMusique(long idUtilisateur, long idMusique) {
 		TableUtilisateur tableUtilisateur = this.select(idUtilisateur);
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
-		tableUtilisateur.getListeMusique().remove(tableMusique);
-		em.merge(tableUtilisateur);
+		if (tableUtilisateur != null && tableMusique != null) {
+			tableUtilisateur.getListeMusique().remove(tableMusique);
+			//tableMusique.getListeUtilisateur().remove(tableUtilisateur);
+			this.em.persist(tableUtilisateur);
+		}
 	}
 }

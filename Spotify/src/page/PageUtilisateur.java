@@ -37,11 +37,11 @@ public class PageUtilisateur implements Serializable {
 
 		Utilisateur resultat = this.metierUtilisateur.rechercher(this.utilisateur);
 		if (resultat != null) {
-			javax.faces.context.FacesContext.getCurrentInstance().addMessage("Form:nom",
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("utilisateurForm:nom",
 					new FacesMessage(" Le nom utilisateur est déjà présent en base."));
 			action = "utilisateur";
 		} else {
-			this.metierUtilisateur.ajoute(this.utilisateur);
+			this.metierUtilisateur.ajouter(this.utilisateur);
 			action = "listeutilisateur";
 		}
 		return action;
@@ -58,15 +58,15 @@ public class PageUtilisateur implements Serializable {
 				&& this.utilisateur.getMotDePasse().equals(resultat.getMotDePasse())) {
 			action = "listeutilisateur";
 		} else {
-			javax.faces.context.FacesContext.getCurrentInstance().addMessage("administrationForm:global",
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("utilisateurForm:global",
 					new FacesMessage(" Le nom utilisateur et/ou mot de passe éronné."));
 			action = "utilisateur";
 		}
 		return action;
 	}
 
-	public List<Utilisateur> liste() {
-		return metierUtilisateur.liste();
+	public List<Utilisateur> lister() {
+		return metierUtilisateur.lister();
 	}
 
 	public Utilisateur getUtilisateur() {

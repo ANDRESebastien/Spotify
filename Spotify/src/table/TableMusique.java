@@ -3,6 +3,7 @@ package table;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -27,7 +28,7 @@ public class TableMusique {
 	private String artiste;
 
 	@Column
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<TableUtilisateur> listeUtilisateur;
 
 	public TableMusique() {

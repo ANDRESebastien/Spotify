@@ -31,7 +31,7 @@ public class TableUtilisateur {
 	private String motDePasse;
 
 	@Column
-	@ManyToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<TableMusique> listeMusique;
 
 	public TableUtilisateur() {
