@@ -45,7 +45,6 @@ public class RestMusique {
 
 	@POST
 	@Path("/{titre}/{artiste}")
-	@Produces("text/html")
 	public void ajouter(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
 		this.metierMusique.ajouter(titre, artiste);
 	}
@@ -59,7 +58,7 @@ public class RestMusique {
 
 	@POST
 	@Path("/utilisateur/{idMusique}/{idUtilisateur}")
-	@Produces("text/html")
+	@Produces("application/json")
 	public void ajouterutilisateur(@PathParam("idMusique") long idMusique,
 			@PathParam("idUtilisateur") long idUtilisateur) {
 		this.metierMusique.ajouterUtilisateur(idMusique, idUtilisateur);
@@ -67,17 +66,22 @@ public class RestMusique {
 
 	@PUT
 	@Path("/{idMusique}/{titre}/{artiste}")
-	@Produces("text/html")
-	public Musique update(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
+	@Produces("application/json")
+	public Musique modifier(@PathParam("idMusique") long idMusique, @PathParam("titre") String titre,
 			@PathParam("artiste") String artiste) {
 		return this.metierMusique.modifier(idMusique, titre, artiste);
 	}
 
 	@DELETE
 	@Path("/{idMusique}")
-	@Produces("text/html")
 	public void supprimer(@PathParam("idMusique") long idMusique) {
 		this.metierMusique.supprimer(idMusique);
+	}
+
+	@DELETE
+	@Path("/{titre}/{artiste}")
+	public void supprimer(@PathParam("titre") String titre, @PathParam("artiste") String artiste) {
+		this.metierMusique.supprimer(titre, artiste);
 	}
 
 	@DELETE
@@ -89,7 +93,6 @@ public class RestMusique {
 
 	@DELETE
 	@Path("/utilisateur/{idMusique}/{idUtilisateur}")
-	@Produces("text/html")
 	public void supprimerutilisateur(@PathParam("idMusique") long idMusique,
 			@PathParam("idUtilisateur") long idUtilisateur) {
 		this.metierMusique.supprimerUtilisateur(idMusique, idUtilisateur);

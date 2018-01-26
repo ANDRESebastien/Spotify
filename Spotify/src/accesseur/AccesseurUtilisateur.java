@@ -1,6 +1,5 @@
 package accesseur;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -26,8 +25,8 @@ public class AccesseurUtilisateur {
 		TableUtilisateur tableUtilisateur = new TableUtilisateur();
 		tableUtilisateur.setNom(utilisateur.getNom());
 		tableUtilisateur.setEmail(utilisateur.getEmail());
-		tableUtilisateur.setMotDePasse(utilisateur.getEmail());
-		tableUtilisateur.setListeMusique(new ArrayList<>());
+		tableUtilisateur.setMotDePasse(utilisateur.getMotDePasse());
+		tableUtilisateur.setListeMusique(utilisateur.getListeMusique());
 		this.em.persist(tableUtilisateur);
 	}
 
@@ -50,9 +49,8 @@ public class AccesseurUtilisateur {
 	}
 
 	public TableUtilisateur update(Utilisateur Utilisateur) {
-		if (this.select(Utilisateur.getIdUtilisateur()) != null) {
-			TableUtilisateur tableUtilisateur = new TableUtilisateur();
-			tableUtilisateur.setIdUtilisateur(Utilisateur.getIdUtilisateur());
+		TableUtilisateur tableUtilisateur = this.select(Utilisateur.getIdUtilisateur());
+		if (tableUtilisateur != null) {
 			tableUtilisateur.setNom(Utilisateur.getNom());
 			tableUtilisateur.setEmail(Utilisateur.getEmail());
 			tableUtilisateur.setMotDePasse(Utilisateur.getMotDePasse());

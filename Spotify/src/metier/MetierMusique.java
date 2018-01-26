@@ -32,7 +32,7 @@ public class MetierMusique implements Serializable {
 	public Musique rechercher(String titre, String artiste) {
 		return this.rechercher(transcodeTableEnParam(titre, artiste));
 	}
-	
+
 	public Musique rechercher(Musique musique) {
 		return transcodeTableEnDTO(this.accesseurMusique.rechercher(musique));
 	}
@@ -47,7 +47,7 @@ public class MetierMusique implements Serializable {
 	public void supprimer(long idMusique) {
 		this.accesseurMusique.delete(idMusique);
 	}
-	
+
 	public Musique modifier(long idMusique, String titre, String artiste) {
 		Musique musique = transcodeTableEnParam(idMusique, titre, artiste);
 		return this.modifier(musique);
@@ -87,16 +87,20 @@ public class MetierMusique implements Serializable {
 	}
 
 	public Musique transcodeTableEnDTO(TableMusique tableMusique) {
-		Musique musique = new MusiqueDTO();
-		musique.setIdMusique(tableMusique.getIdMusique());
-		musique.setTitre(tableMusique.getTitre());
-		musique.setArtiste(tableMusique.getArtiste());
+		if (tableMusique != null) {
+			Musique musique = new MusiqueDTO();
+			musique.setIdMusique(tableMusique.getIdMusique());
+			musique.setTitre(tableMusique.getTitre());
+			musique.setArtiste(tableMusique.getArtiste());
 
-		for (TableUtilisateur tableUtilisateur : tableMusique.getListeUtilisateur()) {
-			tableUtilisateur.setListeMusique(null);
-			musique.getListeUtilisateur().add(tableUtilisateur);
+			for (TableUtilisateur tableUtilisateur : tableMusique.getListeUtilisateur()) {
+				tableUtilisateur.setListeMusique(null);
+				musique.getListeUtilisateur().add(tableUtilisateur);
+			}
+			return musique;
+		} else {
+			return null;
 		}
-		return musique;
 	}
 
 	public Musique transcodeTableEnParam(long idMusique, String titre, String artiste) {

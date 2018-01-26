@@ -22,11 +22,10 @@ public class MetierUtilisateur implements Serializable {
 	@EJB
 	private AccesseurUtilisateur accesseurUtilisateur;
 
-	public void ajouter(String nom, String email,
-			String motDePasse) {
+	public void ajouter(String nom, String email, String motDePasse) {
 		this.ajouter(transcodeTableEnParam(nom, email, motDePasse));
 	}
-	
+
 	public void ajouter(Utilisateur utilisateur) {
 		this.accesseurUtilisateur.insert(utilisateur);
 	}
@@ -72,26 +71,30 @@ public class MetierUtilisateur implements Serializable {
 	}
 
 	public void ajouterMusique(long idUtilisateur, long idMusique) {
-		accesseurUtilisateur.ajouterMusique(idUtilisateur, idMusique);
+		this.accesseurUtilisateur.ajouterMusique(idUtilisateur, idMusique);
 	}
 
 	public void supprimerMusique(long idUtilisateur, long idMusique) {
-		accesseurUtilisateur.supprimerMusique(idUtilisateur, idMusique);
+		this.accesseurUtilisateur.supprimerMusique(idUtilisateur, idMusique);
 	}
 
 	public Utilisateur transcodeTableEnDTO(TableUtilisateur tableUtilisateur) {
-		Utilisateur utilisateur = new UtilisateurDTO();
-		utilisateur.setIdUtilisateur(tableUtilisateur.getIdUtilisateur());
-		utilisateur.setNom(tableUtilisateur.getNom());
-		utilisateur.setEmail(tableUtilisateur.getEmail());
-		utilisateur.setMotDePasse(tableUtilisateur.getMotDePasse());
+		if (tableUtilisateur != null) {
+			Utilisateur utilisateur = new UtilisateurDTO();
+			utilisateur.setIdUtilisateur(tableUtilisateur.getIdUtilisateur());
+			utilisateur.setNom(tableUtilisateur.getNom());
+			utilisateur.setEmail(tableUtilisateur.getEmail());
+			utilisateur.setMotDePasse(tableUtilisateur.getMotDePasse());
 
-		for (TableMusique tableMusique : tableUtilisateur.getListeMusique()) {
-			tableMusique.setListeUtilisateur(null);
-			utilisateur.getListeMusique().add(tableMusique);
+			for (TableMusique tableMusique : tableUtilisateur.getListeMusique()) {
+				tableMusique.setListeUtilisateur(null);
+				utilisateur.getListeMusique().add(tableMusique);
+			}
+
+			return utilisateur;
+		} else {
+			return null;
 		}
-
-		return utilisateur;
 	}
 
 	public Utilisateur transcodeTableEnParam(long idUtilisateur, String nom, String email, String motDePasse) {

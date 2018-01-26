@@ -15,7 +15,6 @@ import javax.ws.rs.core.MediaType;
 
 import metier.MetierUtilisateur;
 import structure.Utilisateur;
-import structure.UtilisateurParam;
 
 @Path("/utilisateur")
 public class RestUtilisateur {
@@ -51,20 +50,21 @@ public class RestUtilisateur {
 		this.metierUtilisateur.ajouter(Utilisateur);
 		return "Ok";
 	}
-
-	@PUT
-	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
-	@Produces("text/html")
-	public Utilisateur modifier(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
-			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
-		return this.metierUtilisateur.modifier(idUtilisateur, nom, email, motDePasse);
-	}
-
+	
 	@POST
 	@Path("/musique/{idUtilisateur}/{idMusique}")
 	@Produces("text/html")
 	public void ajouterMusique(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("idMusique") long idMusique) {
 		this.metierUtilisateur.ajouterMusique(idUtilisateur, idMusique);
+	}
+
+
+	@PUT
+	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
+	@Produces("application/json")
+	public Utilisateur modifier(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
+			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
+		return this.metierUtilisateur.modifier(idUtilisateur, nom, email, motDePasse);
 	}
 
 	@PUT
