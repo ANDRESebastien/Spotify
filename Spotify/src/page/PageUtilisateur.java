@@ -20,7 +20,7 @@ public class PageUtilisateur implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Utilisateur utilisateur;
-	
+
 	@ManagedProperty("#{param.utilisateurId}")
 	private long utilisateurId;
 
@@ -50,13 +50,25 @@ public class PageUtilisateur implements Serializable {
 		}
 		return action;
 	}
+	
+	public String modifier() {
+		String action = "";
+		
+		if (this.utilisateur.getIdUtilisateur() > 0) {
+			this.metierUtilisateur.modifier(this.utilisateur.getIdUtilisateur(), this.utilisateur.getNom(), this.utilisateur.getEmail());
+			action = "listeutilisateur";
+		} else {
+			javax.faces.context.FacesContext.getCurrentInstance().addMessage("utilisateurForm:global",
+					new FacesMessage(" Pour modifier, merci de séléctionner une utilisateur via la liste."));
+			action = "utilisateur";
+		}
+		return action;
+	}
 
 	public String connexion() {
 		String action = "";
-		System.out.println("AdministrationBackingBean:connexion: Bean => nom = " + this.utilisateur.getNom() + " mdp = "
-				+ this.utilisateur.getMotDePasse());
 
-		Utilisateur resultat = this.metierUtilisateur.rechercher(this.utilisateur.getIdUtilisateur());
+		Utilisateur resultat = this.metierUtilisateur.rechercher(this.utilisateur);
 
 		if (resultat != null && this.utilisateur.getNom().equals(resultat.getNom())
 				&& this.utilisateur.getMotDePasse().equals(resultat.getMotDePasse())) {
@@ -68,16 +80,14 @@ public class PageUtilisateur implements Serializable {
 		}
 		return action;
 	}
-	
+
 	public String preparerEdition() {
-		//A FAIRE
-		/*
 		this.utilisateur = this.metierUtilisateur.preparerEdition(this.utilisateurId);
 		if (this.utilisateur != null) {
-			return "musique";
+			return "utilisateur";
+		} else {
+			return null;
 		}
-		*/
-		return null;
 	}
 
 	public List<Utilisateur> lister() {
@@ -90,5 +100,20 @@ public class PageUtilisateur implements Serializable {
 
 	public void setUtilisateur(Utilisateur utilisateur) {
 		this.utilisateur = utilisateur;
+	}
+
+	public long getUtilisateurId() {
+		return utilisateurId;
+	}
+
+	public void setUtilisateurId(long utilisateurId) {
+		this.utilisateurId = utilisateurId;
+	}
+	
+	public String pageListeUtilisateur() {
+		return "listeutilisateur";
+	}
+	public String pageMusique() {
+		return "musique";
 	}
 }

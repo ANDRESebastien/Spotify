@@ -5,12 +5,15 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 
 import metier.MetierUtilisateur;
 import structure.Utilisateur;
 
+@ManagedBean
+@RequestScoped
 public class PageListeUtilisateur {
-
 	private Utilisateur utilisateur;
 	private List<Utilisateur> listeUtilisateur;
 
@@ -50,5 +53,9 @@ public class PageListeUtilisateur {
 
 	public void setListeUtilisateur(List<Utilisateur> listeUtilisateur) {
 		this.listeUtilisateur = listeUtilisateur;
+	}
+	
+	public String pageUtilisateur() {
+		return "utilisateur";
 	}
 }

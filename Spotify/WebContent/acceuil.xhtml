@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Début Application</title>
+</h:head>
+<h:body>
+	<h:form>
+		<h1>Début Application</h1>
+		<h:outputLabel>Bonjour #{pageAcceuil.utilisateur.nom}</h:outputLabel>
+		<h:inputHidden
+			value="#{pageAcceuil.utilisateur.idUtilisateur}" />
+		<p>
+			<h:outputLabel value="Mot de passe : " />
+			<h:inputSecret id="motDePasse" label="Mot de passe"
+				value="#{pageAcceuil.utilisateur.motDePasse}"
+				required="true">
+				<f:validator validatorId="controleMotDePasse" />
+			</h:inputSecret>
+			<h:message for="motDePasse" />
+			<h:commandButton id="changerMDP" label="bouton changerMDP" value="Changer de mot de passe"
+				action="#{pageAcceuil.changerMotDePasse()}" />
+		</p>
+	</h:form>
+	<br />
+	<h:form>
+		<h:commandButton value="Déconnexion" action="#{pageAcceuil.pageUtilisateur()}" />
+	</h:form>
+</h:body>
+</html>

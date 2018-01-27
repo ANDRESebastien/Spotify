@@ -8,11 +8,12 @@
 <h:body>
 	<h1>Utilisateur</h1>
 	<h:form id="utilisateurForm">
+	<h:inputHidden value="#{pageUtilisateur.utilisateur.idUtilisateur}" />
 		<p>
 			<h:outputLabel value="Nom utilisateur : " />
 			<h:inputText id="nom" label="nom"
-				value="#{pageUtilisateur.utilisateur.nom}"
-				required="true" binding="#{nomBinding}">
+				value="#{pageUtilisateur.utilisateur.nom}" required="true"
+				binding="#{nomBinding}">
 				<f:validator validatorId="controleNom" />
 			</h:inputText>
 			<h:message for="nom" />
@@ -21,8 +22,7 @@
 		<p>
 			<h:outputLabel value="Email : " />
 			<h:inputText id="email" label="email"
-				value="#{pageUtilisateur.utilisateur.email}"
-				required="true">
+				value="#{pageUtilisateur.utilisateur.email}" required="true">
 				<f:validator validatorId="controleEmail" />
 			</h:inputText>
 			<h:message for="email" />
@@ -31,8 +31,7 @@
 		<p>
 			<h:outputLabel value="Mot de passe : " />
 			<h:inputSecret id="motDePasse" label="Mot de passe"
-				value="#{pageUtilisateur.utilisateur.motDePasse}"
-				required="true">
+				value="#{pageUtilisateur.utilisateur.motDePasse}" required="true">
 				<f:validator validatorId="controleMotDePasse" />
 				<f:attribute name="attributNom" value="#{nomBinding}" />
 			</h:inputSecret>
@@ -50,14 +49,21 @@
 
 			<h:column>
 				<h:commandButton id="connexion" label="bouton connexion"
-					value="Connexion" action="#{pageUtilisateur.connexion()}" />
+					value="Connexion" action="#{pageAcceuil.connexion(pageUtilisateur.utilisateur)}" >
+					</h:commandButton>
 			</h:column>
+
+			<h:commandButton id="modifier" label="bouton modifier"
+				value="Modifier" action="#{pageUtilisateur.modifier()}">
+			</h:commandButton>
 
 		</p>
 	</h:form>
 	<h:form>
 		<h:commandButton id="boutonliste" label="bouton listeutilisateur"
-			value="Liste" action="listeutilisateur" />
+			value="Liste" action="#{pageUtilisateur.pageListeUtilisateur()}" />
+					<h:commandButton id="boutonMusique" label="bouton Musique"
+			value="Musique" action="#{pageUtilisateur.pageMusique()}" />
 	</h:form>
 </h:body>
 </html>

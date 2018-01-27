@@ -31,11 +31,18 @@ public class MetierUtilisateur implements Serializable {
 	}
 
 	public Utilisateur rechercher(long idUtilisateur) {
-		return transcodeTableEnDTO(this.accesseurUtilisateur.select(idUtilisateur));
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
+		return transcodeTableEnDTO(tableUtilisateur);
+	}
+
+	public Utilisateur rechercher(String nom, String email) {
+		Utilisateur utilisateur = transcodeTableEnParam(nom, email, null);
+		return this.rechercher(utilisateur);
 	}
 
 	public Utilisateur rechercher(Utilisateur utilisateur) {
-		return transcodeTableEnDTO(this.accesseurUtilisateur.select(utilisateur));
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(utilisateur);
+		return transcodeTableEnDTO(tableUtilisateur);
 	}
 
 	// Recherche de l'utilisateur puis suppression
@@ -51,12 +58,20 @@ public class MetierUtilisateur implements Serializable {
 		this.accesseurUtilisateur.delete(idUtilisateur);
 	}
 
-	public Utilisateur modifier(long idUtilisateur, String nom, String email, String motDePasse) {
-		return this.modifier(transcodeTableEnParam(idUtilisateur, nom, email, motDePasse));
+	public Utilisateur modifier(long idUtilisateur, String nom, String email) {
+		Utilisateur utilisateur = transcodeTableEnParam(idUtilisateur, nom, email, null);
+		utilisateur = this.modifier(utilisateur);
+		return utilisateur;
 	}
 
 	public Utilisateur modifier(Utilisateur utilisateur) {
-		return transcodeTableEnDTO(this.accesseurUtilisateur.update(utilisateur));
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.update(utilisateur);
+		return transcodeTableEnDTO(tableUtilisateur);
+	}
+
+	public Utilisateur modifierMotDePasse(Utilisateur utilisateur) {
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.updateMotDePasse(utilisateur);
+		return transcodeTableEnDTO(tableUtilisateur);
 	}
 
 	public List<Utilisateur> lister() {
@@ -78,6 +93,15 @@ public class MetierUtilisateur implements Serializable {
 		this.accesseurUtilisateur.supprimerMusique(idUtilisateur, idMusique);
 	}
 
+	public Utilisateur preparerEdition(long idUtilisateur) {
+		TableUtilisateur tableUtilisateur = this.accesseurUtilisateur.select(idUtilisateur);
+		if (tableUtilisateur != null) {
+			return transcodeTableEnDTO(tableUtilisateur);
+		} else {
+			return null;
+		}
+	}
+
 	public Utilisateur transcodeTableEnDTO(TableUtilisateur tableUtilisateur) {
 		if (tableUtilisateur != null) {
 			Utilisateur utilisateur = new UtilisateurDTO();
@@ -90,7 +114,6 @@ public class MetierUtilisateur implements Serializable {
 				tableMusique.setListeUtilisateur(null);
 				utilisateur.getListeMusique().add(tableMusique);
 			}
-
 			return utilisateur;
 		} else {
 			return null;

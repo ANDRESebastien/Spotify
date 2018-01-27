@@ -34,10 +34,6 @@ public class PageMusique implements Serializable {
 		this.metierMusique.ajouter(this.musique.getTitre(), this.musique.getArtiste());
 	}
 
-	public void supprimer() {
-		this.metierMusique.supprimer(this.musique.getTitre(), this.musique.getArtiste());
-	}
-
 	public String modifier() {
 		String action = "";
 		
@@ -50,6 +46,10 @@ public class PageMusique implements Serializable {
 			action = "musique";
 		}
 		return action;
+	}
+	
+	public void supprimer() {
+		this.metierMusique.supprimer(this.musique.getTitre(), this.musique.getArtiste());
 	}
 
 	public Musique getMusique() {
@@ -78,6 +78,10 @@ public class PageMusique implements Serializable {
 
 	public String pageListemusique() {
 		return "listemusique";
+	}
+	
+	public String pageUtilisateur() {
+		return "utilisateur";
 	}
 
 }

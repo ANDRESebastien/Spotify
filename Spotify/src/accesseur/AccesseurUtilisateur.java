@@ -44,20 +44,35 @@ public class AccesseurUtilisateur {
 
 			return query.getSingleResult();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public TableUtilisateur update(Utilisateur Utilisateur) {
-		TableUtilisateur tableUtilisateur = this.select(Utilisateur.getIdUtilisateur());
+	public TableUtilisateur update(Utilisateur utilisateur) {
+		TableUtilisateur tableUtilisateur = this.select(utilisateur.getIdUtilisateur());
 		if (tableUtilisateur != null) {
-			tableUtilisateur.setNom(Utilisateur.getNom());
-			tableUtilisateur.setEmail(Utilisateur.getEmail());
-			tableUtilisateur.setMotDePasse(Utilisateur.getMotDePasse());
+			tableUtilisateur.setNom(utilisateur.getNom());
+			tableUtilisateur.setEmail(utilisateur.getEmail());
 			return this.em.merge(tableUtilisateur);
 		} else {
 			return null;
 		}
+	}
+
+	public TableUtilisateur updateMotDePasse(Utilisateur utilisateur) {
+		TableUtilisateur tableUtilisateur;
+		try {
+			tableUtilisateur = this.select(utilisateur.getIdUtilisateur());
+			if (tableUtilisateur != null) {
+				tableUtilisateur.setMotDePasse(utilisateur.getMotDePasse());
+				tableUtilisateur = this.em.merge(tableUtilisateur);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			tableUtilisateur = null;
+		}
+		return tableUtilisateur;
 	}
 
 	public void delete(long idUtilisateur) {
@@ -76,8 +91,10 @@ public class AccesseurUtilisateur {
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
 		if (tableUtilisateur != null && tableMusique != null) {
 			tableUtilisateur.getListeMusique().add(tableMusique);
-			tableMusique.getListeUtilisateur().add(tableUtilisateur);
 			this.em.persist(tableUtilisateur);
+			
+			tableMusique = this.accesseurMusique.select(idMusique);
+			tableMusique.getListeUtilisateur().add(tableUtilisateur);
 			this.em.persist(tableMusique);
 		}
 	}
@@ -87,8 +104,10 @@ public class AccesseurUtilisateur {
 		TableMusique tableMusique = this.accesseurMusique.select(idMusique);
 		if (tableUtilisateur != null && tableMusique != null) {
 			tableUtilisateur.getListeMusique().remove(tableMusique);
-			tableMusique.getListeUtilisateur().remove(tableUtilisateur);
 			this.em.persist(tableUtilisateur);
+			
+			tableMusique = this.accesseurMusique.select(idMusique);
+			tableMusique.getListeUtilisateur().remove(tableUtilisateur);
 			this.em.persist(tableMusique);
 		}
 	}

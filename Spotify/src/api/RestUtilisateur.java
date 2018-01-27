@@ -60,11 +60,11 @@ public class RestUtilisateur {
 
 
 	@PUT
-	@Path("/{idUtilisateur}/{nom}/{email}/{motDePasse}")
+	@Path("/{idUtilisateur}/{nom}/{email}")
 	@Produces("application/json")
 	public Utilisateur modifier(@PathParam("idUtilisateur") long idUtilisateur, @PathParam("nom") String nom,
-			@PathParam("email") String email, @PathParam("motDePasse") String motDePasse) {
-		return this.metierUtilisateur.modifier(idUtilisateur, nom, email, motDePasse);
+			@PathParam("email") String email) {
+		return this.metierUtilisateur.modifier(idUtilisateur, nom, email);
 	}
 
 	@PUT
