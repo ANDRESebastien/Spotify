@@ -13,7 +13,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Utilisateur")
+@Table(name = "Utilisateur")
 public class TableUtilisateur {
 
 	@Id
@@ -30,11 +30,11 @@ public class TableUtilisateur {
 	private String motDePasse;
 
 	@Column
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "listeUtilisateur", fetch = FetchType.EAGER)
 	private List<TableMusique> listeMusique;
 
 	public TableUtilisateur() {
-		
+
 	}
 
 	public long getIdUtilisateur() {
